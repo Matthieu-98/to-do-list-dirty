@@ -70,7 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'todo.wsgi.application'
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
