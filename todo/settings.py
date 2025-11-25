@@ -62,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'tasks.context_processors.version',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -69,7 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'todo.wsgi.application'
-
+VERSION = "1.0.1"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
