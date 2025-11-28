@@ -1,0 +1,18 @@
+[
+  {
+    "model": "tasks.task",
+    "pk": 1,
+    "fields": {
+      "title": "Tâche_1",
+      "complete": false
+    }
+  },
+  {
+    "model": "tasks.task",
+    "pk": 2,
+    "fields": {
+      "title": "Tâche_2",
+      "complete": true
+    }
+  }
+]

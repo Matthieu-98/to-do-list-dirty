@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e  # Stoppe immédiatement si une commande échoue
+
 # --- Lecture du paramètre ---
 for arg in "$@"; do
     case $arg in
@@ -14,6 +16,13 @@ if [ -z "$VERSION" ]; then
     echo "Version non fournie : ./build.sh version=1.0.1"
     exit 1
 fi
+
+echo "➡ Lancement du linter Ruff..."
+
+# --- Lancement du linter (checker uniquement) ---
+pipenv run ruff check .
+
+echo "Linter OK, pas d’erreurs détectées"
 
 echo "➡ Mise à jour de la version : $VERSION"
 
@@ -38,6 +47,11 @@ if git rev-parse "$VERSION" >/dev/null 2>&1; then
 else
     git tag "$VERSION"
 fi
+
+# --- Lance les tests ---
+
+echo "➡ Lancement des tests..."
+pytest   # ou python manage.py test
 
 # --- Création de la tarball ZIP ---
 git archive --format=zip --prefix=todolist-$VERSION/ --output=todolist-$VERSION.zip "$VERSION"

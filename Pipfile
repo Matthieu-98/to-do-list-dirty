@@ -8,7 +8,11 @@ requests = "*"
 django = "*"
 
 [dev-packages]
+ruff = "*"
 pytest = "*"
+pytest-django = "*"
+coverage = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.12"
