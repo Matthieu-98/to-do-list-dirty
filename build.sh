@@ -1,8 +1,7 @@
 #!/bin/bash
+set -e
 
-set -e  # Stoppe immédiatement si une commande échoue
-
-# --- Lecture du paramètre ---
+# Lecture du paramètre
 for arg in "$@"; do
     case $arg in
         version=*)
@@ -18,42 +17,30 @@ if [ -z "$VERSION" ]; then
 fi
 
 echo "➡ Lancement du linter Ruff..."
-
-# --- Lancement du linter (checker uniquement) ---
 pipenv run ruff check .
+echo "Linter OK"
 
-echo "Linter OK, pas d’erreurs détectées"
-
-echo "➡ Mise à jour de la version : $VERSION"
-
-# --- Chemin correct vers settings.py ---
+# Mise à jour de la version
 SETTINGS_FILE="./todo/settings.py"
-
 if [ ! -f "$SETTINGS_FILE" ]; then
     echo "Fichier settings.py introuvable : $SETTINGS_FILE"
     exit 1
 fi
-
-# --- Met à jour la variable VERSION ---
 sed -i "s/^VERSION = .*/VERSION = \"$VERSION\"/" "$SETTINGS_FILE"
 
-# --- Commit ---
+# Commit et tag
 git add "$SETTINGS_FILE"
 git commit -m "Bump version to $VERSION"
-
-# --- Tag (si inexistant) ---
 if git rev-parse "$VERSION" >/dev/null 2>&1; then
-    echo "Tag $VERSION existe déjà, utilisation du tag existant"
+    echo "Tag $VERSION existe déjà"
 else
     git tag "$VERSION"
 fi
 
-# --- Lance les tests ---
-
+# Lancement des tests
 echo "➡ Lancement des tests..."
-pytest   # ou python manage.py test
+pytest || { echo "❌ Tests échoués"; exit 1; }
 
-# --- Création de la tarball ZIP ---
+# Création de la tarball ZIP
 git archive --format=zip --prefix=todolist-$VERSION/ --output=todolist-$VERSION.zip "$VERSION"
-
-echo "Build terminé : todolist-$VERSION.zip"
+echo "✅ Build terminé : todolist-$VERSION.zip"

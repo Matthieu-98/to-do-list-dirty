@@ -1,18 +1,19 @@
 import pytest
 from django.urls import reverse
 from tasks.models import Task
+from .utils import test_id
+
 
 @pytest.mark.django_db
+@test_id("TC001")
 def test_homepage_access(client):
-    """La page d'accueil doit répondre 200."""
-    url = reverse("home")   # si ton URL s'appelle différemment, adapte
+    url = reverse("home")
     response = client.get(url)
     assert response.status_code == 200
 
-
 @pytest.mark.django_db
+@test_id("TC002")
 def test_update_task_url(client):
-    """Test que la page de mise à jour répond bien."""
     # Création d’une tâche pour disposer d’un ID valide
     task = Task.objects.create(title="Test task")
 
@@ -22,10 +23,9 @@ def test_update_task_url(client):
     # On s’attend en général à 200 (affichage du formulaire)
     assert response.status_code == 200
 
-
 @pytest.mark.django_db
+@test_id("TC003")
 def test_delete_task_url(client):
-    """Test que la page de suppression est accessible."""
     task = Task.objects.create(title="Task to delete")
 
     url = reverse("delete_task", args=[task.id])
