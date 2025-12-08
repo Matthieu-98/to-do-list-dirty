@@ -1,0 +1,11 @@
+{
+    "tests": [
+        {
+            "test_case_id": "auto-selenium",
+            "outcome": "passed",
+            "testsRun": 1,
+            "failures": [],
+            "errors": []
+        }
+    ]
+}

@@ -25,3 +25,6 @@ PATCH : corrections de bugs ou améliorations mineures
 
 ./build.sh version=X.Y.Z
 
+# How to genarate autotests ? 
+
+pipenv run python manage.py runserver & sleep 3 && pipenv run python tests_e2e/test_mass_tasks.py

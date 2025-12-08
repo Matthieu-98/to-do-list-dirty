@@ -2,16 +2,18 @@ import json
 import yaml
 
 YAML_FILE = "test_list.yaml"
-JSON_FILE = "result_test_auto.json"
+JSON_FILE = "result_test_selenium.json"
 
 
 def load_yaml():
+    """Charge les tests depuis le fichier YAML."""
     with open(YAML_FILE, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
-        return data["tests"]
+        return data.get("tests", [])
 
 
 def load_json():
+    """Charge les résultats des tests auto depuis le JSON."""
     try:
         with open(JSON_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -21,13 +23,12 @@ def load_json():
 
 
 def main():
-    print("Lecture des tests auto via result_test_auto.json…")
+    print("Lecture des tests auto via result_test_selenium.json…")
     json_data = load_json()
     print("OK\n")
 
-    # Extraire les tests auto via leur test_case_id
+    # Construire un dictionnaire des résultats auto
     test_results = {}
-
     if json_data:
         for t in json_data.get("tests", []):
             test_case_id = t.get("test_case_id")
@@ -45,18 +46,23 @@ def main():
     manual = 0
 
     for test in tests_yaml:
-        num = test["numero"]
-        type_test = test["type"]
-        test_id = f"TC{num:03d}"
+        num = test.get("numero")
+        type_test = test.get("type")
+
+        # Générer test_id
+        if type_test == "auto-selenium":
+            test_id = "auto-selenium"
+        elif num is not None:
+            test_id = f"TC{num:03d}"
+        else:
+            test_id = "unknown"
+
         total += 1
 
-        if type_test == "manuel":
+        if type_test in ["manuel", "visuel"]:
             status = "🫱Manual test needed"
             manual += 1
-        elif type_test == "visuel":
-            status = "🫣Visual test needed"
-            manual += 1
-        else:  # auto-unittest
+        else:  # auto-unittest ou auto-selenium
             outcome = test_results.get(test_id)
             if outcome == "passed":
                 status = "✅Passed"
@@ -72,7 +78,7 @@ def main():
 
     # Calcul pourcentages
     def pct(value):
-        return round((value / total) * 100, 1)
+        return round((value / total) * 100, 1) if total else 0
 
     print("\n=== Rapport global ===")
     print(f"Number of tests: {total}")

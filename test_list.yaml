@@ -29,3 +29,7 @@ tests:
   type: auto-unittest
 - numero: 15
   type: auto-unittest
+
+- id: "TC016"
+  type: "manuel"
+  description: "Se connecter manuellement à l'application, compter le nombre de tâches, créer 10 tâches, supprimer 10 tâches et vérifier que le nombre final est le même qu'au départ."

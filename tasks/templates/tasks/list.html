@@ -1,7 +1,6 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <style>
-
 	body{
 		background-color: #3a86ff;
 	}
@@ -44,32 +43,33 @@
 		background-color: #ffbe0b;
 		border-color: #e59400;
 	}
-
 </style>
-<h1 style="text-align: center; color: #fb5607; font-size: 125px;        text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;
 
-"><b>TO DO LIST</b></h1>
-<div  class="center-column">
-	
+<h1 style="text-align: center; color: #fb5607; font-size: 125px; text-shadow: -10px 0 black, 0 10px black, 10px 0 black, 0 -10px black;">
+	<b>TO DO LIST</b>
+</h1>
+
+<div class="center-column">
+
 	<p>Version : {{ APP_VERSION }}</p>
 
 	<form method="POST" action="/">
 		{% csrf_token %}
-		{{form.title}}
-		<input class="btn btn-info" type="submit" name="Create Task">
+		<input id="task-input" type="text" name="title" placeholder="Nouvelle tâche">
+		<input id="add-button" class="btn btn-info" type="submit" value="Ajouter">
 	</form>
 
 	<div class="todo-list">
 	{% for task in tasks %}
-		<div class="item-row">
-			<a class="btn btn-sm btn-info" href = "{% url 'update_task' task.id %}">Update</a>
-			<a class="btn btn-sm btn-danger" href = "{% url 'delete' task.id %}">Delete</a>
-			{% if task.complete == True %}
-			<strike>{{task}}</strike>
-			{% else %}
-			<span>{{task}}</span>
-			{% endif %}
+		<div class="item-row" data-test-name="{{ task.title }}">
+			<a class="btn btn-sm btn-info" href="{% url 'update_task' task.id %}">Update</a>
+			<a class="btn btn-sm btn-danger delete-button" href="{% url 'delete' task.id %}">Delete</a>
 
+			{% if task.complete %}
+				<strike>{{ task }}</strike>
+			{% else %}
+				<span>{{ task }}</span>
+			{% endif %}
 		</div>
 	{% endfor %}
 	</div>
