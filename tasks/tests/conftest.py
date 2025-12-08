@@ -1,4 +1,3 @@
-import pytest
 import json
 
 def pytest_runtest_makereport(item, call):
